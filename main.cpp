@@ -5,7 +5,7 @@
 #include<string.h>
 #include<locale>
 #include<ncurses.h>
-#include<stdio.h>
+// #include<stdio.h>
 using namespace std;
 
 class Words {
@@ -30,7 +30,7 @@ class Words {
       words = w;
     }
 
-     void setBoard(string b)
+     void newBoard(string b)
      {
        int lc = b.length(); // letter count
        char _board[lc + 1];
@@ -59,12 +59,13 @@ class Words {
       int lc = word.length();
       char _word[lc + 1];
       strcpy(_word, word.c_str());
-      setBoard(_word);
+      newBoard(_word);
     }
 
     void newWord()
     {
       word = "";
+      board = "";
       setWord();
     }
 
@@ -87,10 +88,13 @@ class Words {
 int main() {
   char l;
   Words wordgame("werds.txt");
-  cout << wordgame.getWord() << '\n'; 
-  cout << wordgame.getBoard() << '\n';
-  l = wordgame.handleInput("Enter a letter: ");
-  cout << '\n' << "You entered " << l << '\n';
-  wordgame.newWord();
-  cout << '\n' << wordgame.getWord() << '\n';
+  
+   while (l != '!') 
+  {
+    cout << wordgame.getWord() << '\n'; 
+    cout << wordgame.getBoard() << '\n';
+    l = wordgame.handleInput("Enter a letter: ");
+    cout << '\n' << "You entered " << l << '\n';
+    wordgame.newWord();
+  }
 }

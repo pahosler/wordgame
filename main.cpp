@@ -107,9 +107,11 @@ int main() {
     else
     {
       cout << '\n' << "You entered " << l << '\n';
-      --guess;
+      // TODO check for correct guess
+      --guess; // don't do this if the guess is correct!
       cout << '\n' << "You have " << guess << " guesses remaining." << endl;
     }
+    // TODO check for winner 
     if(guess == 0) // and !winner
     {
       replay = ' ';

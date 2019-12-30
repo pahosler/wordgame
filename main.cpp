@@ -5,7 +5,6 @@
 #include<string.h>
 #include<locale>
 #include<ncurses.h>
-// #include<stdio.h>
 using namespace std;
 
 class Words {
@@ -89,12 +88,19 @@ int main() {
   char l;
   Words wordgame("werds.txt");
   
-   while (l != '!') 
+   while (l != '0') 
   {
     cout << wordgame.getWord() << '\n'; 
     cout << wordgame.getBoard() << '\n';
-    l = wordgame.handleInput("Enter a letter: ");
-    cout << '\n' << "You entered " << l << '\n';
-    wordgame.newWord();
+    l = wordgame.handleInput("Enter a letter (0 to quit): ");
+    if (l == '0')
+    {
+      cout << '\n' << "Goodbye" << endl;
+    }
+    else
+    {
+      cout << '\n' << "You entered " << l << '\n';
+      wordgame.newWord();
+    }
   }
 }

@@ -22,7 +22,7 @@ class Words {
       
       file.close();
       setWords(_words);
-      setLetters();
+      setWord();
     }
 
     void setWords(vector<string> w)
@@ -51,16 +51,32 @@ class Words {
        return word;
      }
 
-    void setLetters()
+    void setWord()
     {
-      vector<string> _letters;
       srand(time(nullptr)); // use current time as seed for random generator
       int random_variable = rand();
       word = words.at(rand()/((RAND_MAX + 1u)/words.size()));
       int lc = word.length();
-      char letters[lc + 1];
-      strcpy(letters, word.c_str());
-      setBoard(letters);
+      char _word[lc + 1];
+      strcpy(_word, word.c_str());
+      setBoard(_word);
+    }
+
+    void newWord()
+    {
+      word = "";
+      setWord();
+    }
+
+    char handleInput(string msg)
+    {
+      locale loc;
+      char c;
+      cout << msg;
+      system("stty raw");
+      c = getchar();
+      system("stty cooked");
+      return tolower(c, loc);
     }
 
     private:
@@ -70,13 +86,11 @@ class Words {
 };
 int main() {
   char l;
-  locale loc;
   Words wordgame("werds.txt");
   cout << wordgame.getWord() << '\n'; 
   cout << wordgame.getBoard() << '\n';
-  cout << "Enter a letter: ";
-  system("stty raw");
-   l = getchar();
-   system("stty cooked");
-  cout << '\n' << "You entered " << tolower(l, loc) << '\n';
+  l = wordgame.handleInput("Enter a letter: ");
+  cout << '\n' << "You entered " << l << '\n';
+  wordgame.newWord();
+  cout << '\n' << wordgame.getWord() << '\n';
 }

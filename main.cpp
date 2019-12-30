@@ -86,11 +86,18 @@ class Words {
 };
 int main() {
   char l;
+  char replay = 'y';
+  int guess = 5;
   Words wordgame("werds.txt");
   
-   while (l != '0') 
+   while (l != '0' && replay == 'y') 
   {
-    cout << wordgame.getWord() << '\n'; 
+    if (replay != 'y')
+    {
+      cout << '\n' << "Goodbye" << endl;
+      return 1;
+    }
+    cout << '\n' << wordgame.getWord() << '\n'; 
     cout << wordgame.getBoard() << '\n';
     l = wordgame.handleInput("Enter a letter (0 to quit): ");
     if (l == '0')
@@ -100,6 +107,18 @@ int main() {
     else
     {
       cout << '\n' << "You entered " << l << '\n';
+      --guess;
+      cout << '\n' << "You have " << guess << " guesses remaining." << endl;
+    }
+    if(guess == 0) // and !winner
+    {
+      replay = ' ';
+      while (replay != 'y' && replay != 'n')
+      {
+        cout << '\n' << "Sorry, you lost this round" << endl;
+        replay = wordgame.handleInput("Try again? (y/n) ");
+      }
+      guess = 5;
       wordgame.newWord();
     }
   }

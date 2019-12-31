@@ -5,6 +5,7 @@
 #include<string.h>
 #include<locale>
 #include<ncurses.h>
+#include<algorithm>
 using namespace std;
 
 class Words {
@@ -88,15 +89,10 @@ class Words {
 
 string replaceStrChar(string str, string b, char ch)
 {
-  size_t found = str.find_first_of(ch);
-  int count = 0;
-
-  while(found != string::npos)
-  {
-    b[found] = ch;
-    found = str.find_first_of(ch, found + 1);
-    ++count;
-  }
+  // thanks to psyperl!
+  transform(str.begin(), str.end(), b.begin(), b.begin(), [ch](char w, char b){
+    return w == ch ? w : b;
+  });
 
   return b;
 }

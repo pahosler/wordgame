@@ -29,26 +29,26 @@ class Words {
       words = w;
     }
 
-     void newBoard(string b)
-     {
-       int lc = b.length(); // letter count
-       char _board[lc + 1];
-       strcpy(_board, b.c_str());
-       for (int i = 0; i < sizeof(_board)-1; i++)
-       {
-         board += "*";
-       }
-     }
+    void newBoard(string b)
+    {
+      int lc = b.length(); // letter count
+      char _board[lc + 1];
+      strcpy(_board, b.c_str());
+      for (int i = 0; i < sizeof(_board)-1; i++)
+      {
+        board += "*";
+      }
+    }
 
-     string getBoard()
-     {
-       return board;
-     }
+    string getBoard()
+    {
+      return board;
+    }
 
-     string getWord()
-     {
-       return word;
-     }
+    string getWord()
+    {
+      return word;
+    }
 
     void setWord()
     {
@@ -76,6 +76,7 @@ class Words {
       system("stty raw");
       c = getchar();
       system("stty cooked");
+      cout << endl;
       return tolower(c, loc);
     }
 
@@ -84,12 +85,36 @@ class Words {
     string word;
     string board;
 };
+
+string replaceStrChar(string str, string b, char ch)
+{
+  size_t found = str.find_first_of(ch);
+  int count = 0;
+
+  while(found != string::npos)
+  {
+    b[found] = ch;
+    found = str.find_first_of(ch, found + 1);
+    ++count;
+  }
+
+  return b;
+}
+
 int main() {
+// Init Wordgame
   char l;
   char replay = 'y';
   int guess = 5;
-  Words wordgame("werds.txt");
-  
+  Words game("werds.txt");
+  Words *wordgame;
+  wordgame = &game;
+
+  string board = wordgame->getBoard();
+  string word = wordgame->getWord();
+  size_t found;
+
+// GAME LOOP!
    while (l != '0' && replay == 'y') 
   {
     if (replay != 'y')
@@ -97,31 +122,54 @@ int main() {
       cout << '\n' << "Goodbye" << endl;
       return 1;
     }
-    cout << '\n' << wordgame.getWord() << '\n'; 
-    cout << wordgame.getBoard() << '\n';
-    l = wordgame.handleInput("Enter a letter (0 to quit): ");
+    cout << '\n' << word << '\n'; 
+    cout << board << '\n';
+    l = wordgame->handleInput("Enter a letter (0 to quit): ");
+
     if (l == '0')
     {
       cout << '\n' << "Goodbye" << endl;
     }
     else
     {
-      cout << '\n' << "You entered " << l << '\n';
-      // TODO check for correct guess
-      --guess; // don't do this if the guess is correct!
+      board = replaceStrChar(word, board, l);
+      found = board.find(l);
+      if (found == string::npos) // check correct guess
+      {
+        --guess; // lose a chance if incorrect
+      }
+      else 
+      {
+        wordgame->newBoard(board); // update board if correct
+      }
       cout << '\n' << "You have " << guess << " guesses remaining." << endl;
     }
-    // TODO check for winner 
-    if(guess == 0) // and !winner
+
+    if(guess == 0 && board != word) // check if out of guess and we didn't win
     {
       replay = ' ';
+      cout << '\n' << "Sorry, you lost this round" << endl;
       while (replay != 'y' && replay != 'n')
       {
-        cout << '\n' << "Sorry, you lost this round" << endl;
-        replay = wordgame.handleInput("Try again? (y/n) ");
+        replay = wordgame->handleInput("Try again? (y/n) ");
       }
       guess = 5;
-      wordgame.newWord();
+      wordgame->newWord();
+      word = wordgame->getWord();
+      board = wordgame->getBoard();
+    }
+    else if (board == word)
+    {
+      replay = ' ';
+      cout << '\n' << "Winner Winner Chicken Dinner!" << endl;
+      while (replay != 'y' && replay != 'n')
+      {
+        replay = wordgame->handleInput("Try again? (y/n) ");
+      }
+      guess = 5;
+      wordgame->newWord();
+      word = wordgame->getWord();
+      board = wordgame->getBoard();
     }
   }
 }

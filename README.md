@@ -8,7 +8,7 @@ repl.it will ask you to set up the run button to execute the code
 - select C++ from the language dropdown menu
 - then put this in the run field
   ```cpp
-   g++ main.cpp -o main && ./main
+     clang++-7 -pthread -o main main.cpp
   ```
 
 

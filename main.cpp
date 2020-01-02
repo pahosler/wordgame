@@ -97,18 +97,46 @@ string replaceStrChar(string str, string b, char ch)
   return b;
 }
 
+void initGame(Words *wg, string *w, string *b, int *g)
+{
+  // Words game(wordlist);
+  string word = "";
+  string board = "";  
+  wg->newWord();
+  word = wg->getWord();
+  board = wg->getBoard();
+  cout << "word from getWord() "<< wg->getWord() << endl;
+  cout << "word from word " << word << endl;
+  *w = word;
+  *b = board;
+  *g = *g + 1;
+  cout << "word from *w " << *w << endl;
+}
+
 int main() {
 // Init Wordgame
   char l;
   char replay = 'y';
+  // string word = "";
+  // string board = "";
   int guess = 5;
   Words game("werds.txt");
   Words *wordgame;
   wordgame = &game;
-
   string board = wordgame->getBoard();
   string word = wordgame->getWord();
+
   size_t found;
+  // initGame(&word, &board, &guess);
+  // cout << word << board << guess << endl;
+  // initGame(&game, &word, &board, &guess);
+  // cout << word << board << guess << endl;
+
+  // return 0;
+ 
+  // cout << word << '\n' << board << '\n';
+  // helloword(&game, &word, &board);
+  // cout << word << '\n' << board << '\n';
 
 // GAME LOOP!
    while (l != '0' && replay == 'y') 
@@ -118,7 +146,7 @@ int main() {
       cout << '\n' << "Goodbye" << endl;
       return 1;
     }
-    cout << '\n' << word << '\n'; 
+    // cout << '\n' << word << '\n'; 
     cout << board << '\n';
     l = wordgame->handleInput("Enter a letter (0 to quit): ");
 
@@ -145,6 +173,7 @@ int main() {
     {
       replay = ' ';
       cout << '\n' << "Sorry, you lost this round" << endl;
+      cout << "The word was " << word << endl;
       while (replay != 'y' && replay != 'n')
       {
         replay = wordgame->handleInput("Try again? (y/n) ");
@@ -153,6 +182,7 @@ int main() {
       wordgame->newWord();
       word = wordgame->getWord();
       board = wordgame->getBoard();
+      system("clear");
     }
     else if (board == word)
     {
@@ -166,6 +196,15 @@ int main() {
       wordgame->newWord();
       word = wordgame->getWord();
       board = wordgame->getBoard();
+      system("clear");
     }
   }
-}
+  
+} 
+
+  // string *ptr_word = &word;
+  // string *ptr_board = &board;
+  // int *ptr_guess = &guess;
+  // string words = "werds.txt";
+    // int guess = 5;
+  

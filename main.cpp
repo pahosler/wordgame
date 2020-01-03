@@ -1,11 +1,37 @@
-#include<iostream> //for input and output streams.
-#include<fstream> //for file
-#include<vector>
-#include<time.h>
-#include<string.h>
-#include<locale>
-#include<ncurses.h>
-#include<algorithm>
+/*
+*
+*  wordgame by P.A. Hosler
+*
+*  console hangman style game, guess a word by entering
+*  letters. You get 5 chances!
+*  0 - exit during gameplay
+*  y/n - replay query, n ends game
+*
+* @params string wordfile, single line list of words in a txt file
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*
+*/
+
+
+#include<iostream>   // for input and output streams.
+#include<fstream>    // for file
+#include<vector>     // for variable arrays
+#include<time.h>     // for seeding rand
+#include<string.h>   // for string methods
+#include<locale>     // for system
+#include<algorithm>  // for finding/replacing a char in a string
 using namespace std;
 
 class Words {
@@ -22,7 +48,7 @@ class Words {
       int lc = word.length();
       char _word[lc + 1];
       strcpy(_word, word.c_str());
-      newBoard(_word);
+      setBoard(_word);
     }
 
   public:
@@ -39,7 +65,7 @@ class Words {
       file.close();
     }
 
-    void newBoard(string b)
+    void setBoard(string b)
     {
       int lc = b.length(); // letter count
       char _board[lc + 1];
@@ -129,7 +155,7 @@ int main() {
       }
       else 
       {
-        wordgame->newBoard(board); // update board if correct
+        wordgame->setBoard(board); // update board if correct
       }
       cout << '\n' << "You have " << guess << " guesses remaining." << endl;
     }

@@ -9,25 +9,34 @@
 using namespace std;
 
 class Words {
+  private:
+    vector<string> words;
+    string word;
+    string board;
+
+    void setWord()
+    {
+      srand(time(nullptr)); // use current time as seed for random generator
+      int random_variable = rand();
+      word = words.at(rand()/((RAND_MAX + 1u)/words.size()));
+      int lc = word.length();
+      char _word[lc + 1];
+      strcpy(_word, word.c_str());
+      newBoard(_word);
+    }
+
   public:
-    Words(string wordfile){
-      vector<string> _words;
+    Words(string wordfile="werds.txt")
+    {
       string line;
       ifstream file(wordfile);
 
       while (getline(file,line))
       {
-        _words.push_back(line);
+        words.push_back(line);
       }
       
       file.close();
-      setWords(_words);
-      setWord();
-    }
-
-    void setWords(vector<string> w)
-    {
-      words = w;
     }
 
     void newBoard(string b)
@@ -51,17 +60,6 @@ class Words {
       return word;
     }
 
-    void setWord()
-    {
-      srand(time(nullptr)); // use current time as seed for random generator
-      int random_variable = rand();
-      word = words.at(rand()/((RAND_MAX + 1u)/words.size()));
-      int lc = word.length();
-      char _word[lc + 1];
-      strcpy(_word, word.c_str());
-      newBoard(_word);
-    }
-
     void newWord()
     {
       word = "";
@@ -81,10 +79,6 @@ class Words {
       return tolower(c, loc);
     }
 
-    private:
-    vector<string> words;
-    string word;
-    string board;
 };
 
 string replaceStrChar(string str, string b, char ch)
@@ -97,46 +91,18 @@ string replaceStrChar(string str, string b, char ch)
   return b;
 }
 
-void initGame(Words *wg, string *w, string *b, int *g)
-{
-  // Words game(wordlist);
-  string word = "";
-  string board = "";  
-  wg->newWord();
-  word = wg->getWord();
-  board = wg->getBoard();
-  cout << "word from getWord() "<< wg->getWord() << endl;
-  cout << "word from word " << word << endl;
-  *w = word;
-  *b = board;
-  *g = *g + 1;
-  cout << "word from *w " << *w << endl;
-}
-
 int main() {
 // Init Wordgame
   char l;
   char replay = 'y';
-  // string word = "";
-  // string board = "";
   int guess = 5;
   Words game("werds.txt");
   Words *wordgame;
   wordgame = &game;
+  wordgame->newWord();
   string board = wordgame->getBoard();
   string word = wordgame->getWord();
-
   size_t found;
-  // initGame(&word, &board, &guess);
-  // cout << word << board << guess << endl;
-  // initGame(&game, &word, &board, &guess);
-  // cout << word << board << guess << endl;
-
-  // return 0;
- 
-  // cout << word << '\n' << board << '\n';
-  // helloword(&game, &word, &board);
-  // cout << word << '\n' << board << '\n';
 
 // GAME LOOP!
    while (l != '0' && replay == 'y') 
@@ -146,7 +112,6 @@ int main() {
       cout << '\n' << "Goodbye" << endl;
       return 1;
     }
-    // cout << '\n' << word << '\n'; 
     cout << board << '\n';
     l = wordgame->handleInput("Enter a letter (0 to quit): ");
 
@@ -187,7 +152,7 @@ int main() {
     else if (board == word)
     {
       replay = ' ';
-      cout << '\n' << "Winner Winner Chicken Dinner!" << endl;
+      cout << '\n' << word << '\n' << "Winner Winner Chicken Dinner!" << endl;
       while (replay != 'y' && replay != 'n')
       {
         replay = wordgame->handleInput("Try again? (y/n) ");
@@ -199,12 +164,4 @@ int main() {
       system("clear");
     }
   }
-  
 } 
-
-  // string *ptr_word = &word;
-  // string *ptr_board = &board;
-  // int *ptr_guess = &guess;
-  // string words = "werds.txt";
-    // int guess = 5;
-  

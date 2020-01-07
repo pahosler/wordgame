@@ -40,15 +40,22 @@ class Words {
     string word;
     string board;
 
-    void setWord()
+    void _word()
     {
+      word = "";
       srand(time(nullptr)); // use current time as seed for random generator
       int random_variable = rand();
       word = words.at(rand()/((RAND_MAX + 1u)/words.size()));
-      int lc = word.length();
-      char _word[lc + 1];
-      strcpy(_word, word.c_str());
-      setBoard(_word);
+    }
+
+    void _board()
+    {
+      board = "";
+      for(int i = 0; i < word.length(); i++)
+      {
+        board += "*";
+      }
+
     }
 
   public:
@@ -65,32 +72,16 @@ class Words {
       file.close();
     }
 
-    void setBoard(string b)
-    {
-      int lc = b.length(); // letter count
-      char _board[lc + 1];
-      strcpy(_board, b.c_str());
-      for (int i = 0; i < sizeof(_board)-1; i++)
-      {
-        board += "*";
-      }
-    }
-
     string getBoard()
     {
+      _board();
       return board;
     }
 
     string getWord()
     {
+      _word();
       return word;
-    }
-
-    void newWord()
-    {
-      word = "";
-      board = "";
-      setWord();
     }
 
     char handleInput(string msg)
@@ -107,14 +98,19 @@ class Words {
 
 };
 
-string replaceStrChar(string str, string b, char ch)
+void replaceStrChar(string str, string *b, char ch)
 {
   // thanks to psyperl!
-  transform(str.begin(), str.end(), b.begin(), b.begin(), [ch](char w, char b){
+  transform(str.begin(), str.end(), b->begin(), b->begin(), [ch](char w, char b){
     return w == ch ? w : b;
   });
+}
 
-  return b;
+int initGame(Words *wg, string *w, string *b, int g = 5)
+{
+  *w = wg->getWord();
+  *b = wg->getBoard();
+  return g;
 }
 
 int main() {
@@ -122,14 +118,13 @@ int main() {
   char l;
   char replay = 'y';
   int guess = 5;
-  Words game("werds.txt");
-  Words *wordgame;
-  wordgame = &game;
-  wordgame->newWord();
-  string board = wordgame->getBoard();
-  string word = wordgame->getWord();
   size_t found;
+  Words wordgame("werds.txt");
+  string board;
+  string word;
 
+  initGame(&wordgame, &word, &board);
+  
 // GAME LOOP!
    while (l != '0' && replay == 'y') 
   {
@@ -139,7 +134,7 @@ int main() {
       return 1;
     }
     cout << board << '\n';
-    l = wordgame->handleInput("Enter a letter (0 to quit): ");
+    l = wordgame.handleInput("Enter a letter (0 to quit): ");
 
     if (l == '0')
     {
@@ -147,15 +142,11 @@ int main() {
     }
     else
     {
-      board = replaceStrChar(word, board, l);
+      replaceStrChar(word, &board, l);
       found = board.find(l);
       if (found == string::npos) // check correct guess
       {
         --guess; // lose a chance if incorrect
-      }
-      else 
-      {
-        wordgame->setBoard(board); // update board if correct
       }
       cout << '\n' << "You have " << guess << " guesses remaining." << endl;
     }
@@ -167,12 +158,9 @@ int main() {
       cout << "The word was " << word << endl;
       while (replay != 'y' && replay != 'n')
       {
-        replay = wordgame->handleInput("Try again? (y/n) ");
+        replay = wordgame.handleInput("Try again? (y/n) ");
       }
-      guess = 5;
-      wordgame->newWord();
-      word = wordgame->getWord();
-      board = wordgame->getBoard();
+      guess = initGame(&wordgame, &word, &board,7);
       system("clear");
     }
     else if (board == word)
@@ -181,12 +169,9 @@ int main() {
       cout << '\n' << word << '\n' << "Winner Winner Chicken Dinner!" << endl;
       while (replay != 'y' && replay != 'n')
       {
-        replay = wordgame->handleInput("Try again? (y/n) ");
+        replay = wordgame.handleInput("Try again? (y/n) ");
       }
-      guess = 5;
-      wordgame->newWord();
-      word = wordgame->getWord();
-      board = wordgame->getBoard();
+      guess = initGame(&wordgame, &word, &board);
       system("clear");
     }
   }
